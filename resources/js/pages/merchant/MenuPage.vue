@@ -2,7 +2,9 @@
 import { onMounted, reactive, ref } from 'vue';
 import { api } from '../../lib/api';
 import { money } from '../../lib/format';
+import { useConfirm } from '../../stores/confirm';
 
+const { ask } = useConfirm();
 const items = ref([]);
 const loading = ref(true);
 const saving = ref(false);
@@ -115,7 +117,15 @@ async function submit() {
 }
 
 async function remove(item) {
-    if (!window.confirm(`Remove "${item.name}" from your menu?`)) {
+    const confirmed = await ask({
+        title: 'Hapus Menu dari Katalog?',
+        message: `Apakah Anda yakin ingin menghapus "${item.name}" dari menu katering Anda? Tindakan ini tidak dapat dibatalkan.`,
+        confirmText: 'Ya, Hapus Menu',
+        cancelText: 'Batal',
+        type: 'danger',
+    });
+
+    if (!confirmed) {
         return;
     }
 

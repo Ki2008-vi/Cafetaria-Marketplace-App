@@ -5,9 +5,11 @@ import StatusBadge from '../components/StatusBadge.vue';
 import { api } from '../lib/api';
 import { formatDate, formatDateTime, money } from '../lib/format';
 import { useAuth } from '../stores/auth';
+import { useConfirm } from '../stores/confirm';
 
 const route = useRoute();
 const { isOffice } = useAuth();
+const { ask } = useConfirm();
 
 const invoice = ref(null);
 const loading = ref(true);
@@ -33,7 +35,15 @@ function printInvoice() {
 }
 
 async function pay() {
-    if (!window.confirm(`Mark ${invoice.value.invoice_number} as paid?`)) {
+    const confirmed = await ask({
+        title: 'Konfirmasi Pembayaran Faktur',
+        message: `Tandai faktur ${invoice.value.invoice_number} sebesar ${money(invoice.value.total_amount)} sebagai sudah LUNAS?`,
+        confirmText: 'Ya, Tandai Lunas',
+        cancelText: 'Batal',
+        type: 'info',
+    });
+
+    if (!confirmed) {
         return;
     }
 

@@ -29,7 +29,8 @@ class CatererController
             $query->where(function ($query) use ($term) {
                 $query->whereRaw('LOWER(company_name) LIKE ?', [$term])
                     ->orWhereRaw('LOWER(description) LIKE ?', [$term])
-                    ->orWhereRaw('LOWER(cuisine_type) LIKE ?', [$term]);
+                    ->orWhereRaw('LOWER(cuisine_type) LIKE ?', [$term])
+                    ->orWhereHas('menuItems', fn ($menuQuery) => $menuQuery->whereRaw('LOWER(name) LIKE ?', [$term])->orWhereRaw('LOWER(description) LIKE ?', [$term]));
             });
         }
 

@@ -9,6 +9,53 @@ const search = ref('');
 const loading = ref(true);
 const error = ref('');
 
+const popularDishes = [
+    {
+        id: 1,
+        name: 'Nasi Rendang Komplit',
+        caterer: 'Dapur Nusantara',
+        cuisine: 'Indonesian',
+        calories: '650 kkal',
+        portion: 'Porsi 4–6 orang',
+        price: 45000,
+        img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80',
+        featured: false,
+    },
+    {
+        id: 2,
+        name: 'Chicken Quinoa Bowl',
+        caterer: 'Green Bowl Kitchen',
+        cuisine: 'Healthy',
+        calories: '480 kkal',
+        portion: 'Porsi 4 orang',
+        price: 55000,
+        img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=400&q=80',
+        featured: true, // Spotlight card from Image 2
+    },
+    {
+        id: 3,
+        name: 'Ayam Bakar Sambal Matah',
+        caterer: 'Dapur Nusantara',
+        cuisine: 'Indonesian',
+        calories: '520 kkal',
+        portion: 'Porsi 4–6 orang',
+        price: 42000,
+        img: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=400&q=80',
+        featured: false,
+    },
+    {
+        id: 4,
+        name: 'Vegan Buddha Salad',
+        caterer: 'Green Bowl Kitchen',
+        cuisine: 'Plant-Based',
+        calories: '390 kkal',
+        portion: 'Porsi 4 orang',
+        price: 48000,
+        img: 'https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&w=400&q=80',
+        featured: false,
+    },
+];
+
 async function load() {
     loading.value = true;
     error.value = '';
@@ -29,132 +76,441 @@ async function load() {
     }
 }
 
+async function onSearch() {
+    await load();
+    setTimeout(() => {
+        const el = document.getElementById('mitra-katering');
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, 60);
+}
+
+async function filterCategory(cat) {
+    search.value = cat;
+    await onSearch();
+}
+
+async function clearSearch() {
+    search.value = '';
+    await load();
+}
+
 onMounted(load);
 </script>
 
 <template>
-    <div>
-        <section class="relative overflow-hidden">
-            <div class="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-leaf-100 blur-3xl"></div>
-            <div class="pointer-events-none absolute -bottom-40 -left-24 h-96 w-96 rounded-full bg-ember-100 blur-3xl"></div>
+    <div class="min-h-screen bg-[#FAF7F2] text-stone-900 antialiased selection:bg-amber-300 selection:text-stone-900">
+        <!-- Hero Section (GoFoddie Inspired with Warm Glow & Orbital Visuals) -->
+        <section class="relative overflow-hidden border-b border-stone-200/80 bg-gradient-to-b from-amber-50/40 via-[#FAF7F2] to-[#FAF7F2] min-h-[calc(100dvh-73px)] flex flex-col justify-center py-10 lg:py-14">
+            <!-- Decorative Subtle Ambient Glows -->
+            <div class="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 h-[550px] w-[900px] rounded-full bg-gradient-to-b from-amber-200/30 to-transparent blur-3xl"></div>
+            
+            <div class="relative mx-auto max-w-6xl px-5 w-full flex-1 flex flex-col justify-between my-auto">
+                <div class="grid items-center gap-12 lg:grid-cols-12 my-auto py-6">
+                    <!-- Left Hero Content -->
+                    <div class="lg:col-span-7">
+                        <div class="inline-flex items-center gap-2 rounded-full border border-amber-200/80 bg-amber-50/90 px-3.5 py-1 text-xs font-semibold text-amber-800 shadow-2xs">
+                            <span class="flex h-2 w-2 rounded-full bg-amber-500 animate-pulse"></span>
+                            <span>B2B Catering Marketplace Terpercaya</span>
+                        </div>
 
-            <div class="relative mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
-                <div>
-                    <p class="mb-4 inline-flex items-center rounded-full border border-leaf-200 bg-leaf-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-leaf-700">
-                        Fresh office lunches
-                    </p>
-                    <h1 class="max-w-2xl font-display text-4xl leading-[1.08] text-ink-900 sm:text-5xl lg:text-6xl">
-                        Feed your team without the daily lunch scramble.
-                    </h1>
-                    <p class="mt-5 max-w-xl text-base leading-relaxed text-ink-500">
-                        Discover trusted local caterers, order lunch by the portion, and keep every invoice in one place.
-                        Built for offices that want good food and a simple process.
-                    </p>
+                        <h1 class="mt-5 font-display text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl lg:text-6xl lg:leading-[1.12]">
+                            Makan Siang Tim Jadi
+                            <span class="relative inline-block text-amber-600">
+                                Lebih Berselera
+                                <svg class="absolute -bottom-1.5 left-0 w-full text-amber-300/70" viewBox="0 0 100 12" fill="none" preserveAspectRatio="none">
+                                    <path d="M0 8C30 1 70 1 100 8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                                </svg>
+                            </span>
+                            & Praktis.
+                        </h1>
 
-                    <form class="mt-8 flex max-w-xl flex-col gap-2 sm:flex-row" @submit.prevent="load">
-                        <input
-                            v-model="search"
-                            class="input"
-                            type="search"
-                            placeholder="Search caterers, cuisine, or a dish..."
-                        />
-                        <button type="submit" class="btn-accent shrink-0">Find lunch</button>
-                    </form>
+                        <p class="mt-5 max-w-xl text-base leading-relaxed text-stone-600 sm:text-lg">
+                            Pesan katering harian, meeting lunch, dan event kantor dari mitra dapur terverifikasi. Tentukan porsi tim dan satukan semua tagihan ke <strong>1 invoice terpadu</strong>.
+                        </p>
 
-                    <div class="mt-5 flex flex-wrap items-center gap-3 text-sm text-ink-400">
-                        <RouterLink to="/register" class="font-semibold text-leaf-700 hover:underline">
-                            Register your office
-                        </RouterLink>
-                        <span class="text-ink-900/20">·</span>
-                        <RouterLink to="/register" class="font-semibold text-leaf-700 hover:underline">
-                            List your catering business
-                        </RouterLink>
-                    </div>
-                </div>
+                        <!-- Search Bar (GoFoddie Pill Style) -->
+                       
 
-                <div class="relative mx-auto w-full max-w-md">
-                    <div class="card relative z-10 p-6">
-                        <p class="text-xs font-bold uppercase tracking-[0.18em] text-ink-400">Today at a glance</p>
-                        <div class="mt-5 space-y-4">
-                            <div class="flex items-start gap-3 rounded-2xl bg-leaf-50 p-4">
-                                <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-leaf-700 text-white">01</span>
-                                <div>
-                                    <p class="font-semibold text-ink-900">Browse local caterers</p>
-                                    <p class="text-sm text-ink-500">Compare menus, prices, and cuisine types.</p>
-                                </div>
+                        <!-- Quick Category Pills -->
+                        <div class="mt-4 flex flex-wrap items-center gap-2 text-xs text-stone-500">
+                            <span class="font-medium text-stone-400">Populer:</span>
+                            <button type="button" @click="filterCategory('Nusantara')" class="rounded-full border border-stone-200 bg-white px-3 py-1 hover:border-amber-400 hover:text-amber-800 transition">
+                                🍛 Nusantara
+                            </button>
+                            <button type="button" @click="filterCategory('Healthy')" class="rounded-full border border-stone-200 bg-white px-3 py-1 hover:border-amber-400 hover:text-amber-800 transition">
+                                🥗 Healthy Bowls
+                            </button>
+                            <button type="button" @click="filterCategory('Bento')" class="rounded-full border border-stone-200 bg-white px-3 py-1 hover:border-amber-400 hover:text-amber-800 transition">
+                                🍱 Bento Box
+                            </button>
+                            <button type="button" @click="filterCategory('Snack')" class="rounded-full border border-stone-200 bg-white px-3 py-1 hover:border-amber-400 hover:text-amber-800 transition">
+                                🥐 Snack Meeting
+                            </button>
+                        </div>
+
+                        <!-- Social Proof Avatars Stack -->
+                        <div class="mt-8 flex items-center gap-4 border-t border-stone-200/60 pt-6">
+                            <div class="flex -space-x-2 overflow-hidden">
+                                <img class="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80" alt="Customer" />
+                                <img class="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=80&q=80" alt="Customer" />
+                                <img class="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=80&q=80" alt="Customer" />
+                                <img class="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=80&q=80" alt="Customer" />
                             </div>
-                            <div class="flex items-start gap-3 rounded-2xl bg-ember-50 p-4">
-                                <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ember-500 text-white">02</span>
-                                <div>
-                                    <p class="font-semibold text-ink-900">Order by the portion</p>
-                                    <p class="text-sm text-ink-500">Pick a delivery date and tell the caterer what you need.</p>
+                            <div class="text-xs">
+                                <div class="flex items-center gap-1 font-bold text-stone-900">
+                                    <span class="text-amber-500">★★★★★</span>
+                                    <span>4.9 / 5.0</span>
                                 </div>
-                            </div>
-                            <div class="flex items-start gap-3 rounded-2xl bg-cream-100 p-4">
-                                <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ink-700 text-white">03</span>
-                                <div>
-                                    <p class="font-semibold text-ink-900">Pay from one invoice</p>
-                                    <p class="text-sm text-ink-500">Both the office and the caterer see the same invoice.</p>
-                                </div>
+                                <p class="text-stone-500">Dipercaya oleh <strong>350+ tim kantor</strong> setiap hari</p>
                             </div>
                         </div>
                     </div>
-                    <div class="absolute -bottom-5 -right-5 h-32 w-32 rounded-3xl border border-ember-200 bg-ember-100/70"></div>
+
+                    <!-- Right Hero Visual (GoFoddie Orbital Dish Feature) -->
+                    <div class="relative flex items-center justify-center lg:col-span-5 py-6">
+                        <div class="relative flex items-center justify-center">
+                            <!-- Background Concentric Rings -->
+                            <div class="absolute h-88 w-88 sm:h-[420px] sm:w-[420px] lg:h-[460px] lg:w-[460px] rounded-full border border-amber-300/40 bg-amber-100/30"></div>
+                            <div class="absolute h-[460px] w-[460px] sm:h-[500px] sm:w-[500px] lg:h-[540px] lg:w-[540px] rounded-full border border-stone-300/30"></div>
+
+                            <!-- Central Appetizing Culinary Bowl -->
+                            <div class="relative z-10 h-72 w-72 sm:h-88 sm:w-88 lg:h-96 lg:w-96 overflow-hidden rounded-full border-4 border-white shadow-2xl transition hover:scale-102 duration-300">
+                                <img
+                                    src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80"
+                                    alt="Healthy Fresh Catering"
+                                    class="h-full w-full object-cover"
+                                />
+                            </div>
+
+                            <!-- Floating Orbital Badge 1: Delivery Time -->
+                            <div class="absolute -top-4 -left-4 z-20 flex items-center gap-2 rounded-2xl border border-stone-200/80 bg-white/95 px-3.5 py-2 shadow-lg backdrop-blur animate-bounce" style="animation-duration: 4s;">
+                                <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-100 text-amber-700">
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] font-bold text-stone-400 uppercase tracking-wider">Tepat Waktu</span>
+                                    <span class="block text-xs font-bold text-stone-900">Delivery 11:30 WIB</span>
+                                </div>
+                            </div>
+
+                            <!-- Floating Orbital Badge 2: 1 Invoice -->
+                            <div class="absolute -bottom-6 -right-2 z-20 flex items-center gap-2 rounded-2xl border border-stone-200/80 bg-white/95 px-3.5 py-2 shadow-lg backdrop-blur">
+                                <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] font-bold text-emerald-600 uppercase tracking-wider">B2B Solved</span>
+                                    <span class="block text-xs font-bold text-stone-900">1 Invoice Bulanan</span>
+                                </div>
+                            </div>
+
+                            <!-- Floating Orbital Badge 3: Halal & Higienis -->
+                            <div class="absolute top-1/2 -right-8 z-20 -translate-y-1/2 rounded-full border border-stone-200 bg-white px-3 py-1.5 shadow-md text-xs font-semibold text-stone-700">
+                                🌿 100% Halal Certified
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trusted Office Companies Monochromatic Bar -->
+                <div class="mt-8 lg:mt-12 border-t border-stone-200/70 pt-6 pb-2">
+                    <p class="text-center text-xs font-semibold uppercase tracking-wider text-stone-400">
+                        Dipercaya oleh Office Manager di berbagai perusahaan terkemuka
+                    </p>
+                    <div class="mt-4 flex flex-wrap items-center justify-center gap-8 opacity-60 grayscale transition hover:grayscale-0 sm:gap-12 text-sm font-bold tracking-tight text-stone-600">
+                        <span class="flex items-center gap-1.5">TOKOPEDIA</span>
+                        <span class="flex items-center gap-1.5">SHOPEE</span>
+                        <span class="flex items-center gap-1.5">GOTO</span>
+                        <span class="flex items-center gap-1.5">TRAVELOKA</span>
+                        <span class="flex items-center gap-1.5">BANK CENTRAL ASIA</span>
+                        <span class="flex items-center gap-1.5">BLIBLI</span>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="border-t border-ink-900/5 bg-white/50">
-            <div class="mx-auto max-w-6xl px-5 py-14">
-                <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
-                    <div>
-                        <p class="text-xs font-bold uppercase tracking-[0.18em] text-ember-600">Featured kitchens</p>
-                        <h2 class="mt-2 font-display text-3xl text-ink-900">Caterers ready to cook</h2>
+        <!-- Featured Menu Items Showcase (Image 2 Bell Inspired Overlapping Plate Cards) -->
+        <section class="mx-auto max-w-6xl px-5 py-20">
+            <div class="text-center">
+                <span class="rounded-full bg-amber-100 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-amber-800">
+                    Pilihan Favorit Tim
+                </span>
+                <h2 class="mt-3 font-display text-3xl font-bold tracking-tight text-stone-900 sm:text-4xl">
+                    Menu Terlaris Minggu Ini
+                </h2>
+                <p class="mx-auto mt-2 max-w-lg text-sm text-stone-500">
+                    Pilihan menu makan siang porsi tim kantor yang paling banyak dipesan minggu ini.
+                </p>
+            </div>
+
+            <!-- Bell-style Cards Grid with Overlapping Plates -->
+            <div class="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                <div
+                    v-for="dish in popularDishes"
+                    :key="dish.id"
+                    class="group relative flex flex-col justify-between pt-14"
+                >
+                    <!-- Overlapping Floating Circular Food Plate -->
+                    <div class="absolute left-1/2 top-0 -translate-x-1/2 z-20 h-28 w-28 overflow-hidden rounded-full border-4 border-white shadow-xl transition-transform duration-300 group-hover:scale-108 group-hover:-translate-y-1">
+                        <img :src="dish.img" :alt="dish.name" class="h-full w-full object-cover" />
                     </div>
-                    <RouterLink to="/register" class="btn-secondary">Join as an office</RouterLink>
+
+                    <!-- Card Body -->
+                    <div
+                        class="flex flex-1 flex-col justify-between rounded-3xl p-6 pt-18 shadow-sm transition-all duration-200 group-hover:shadow-lg"
+                        :class="dish.featured ? 'bg-amber-400 text-stone-950 border border-amber-300' : 'bg-white text-stone-900 border border-stone-200/80'"
+                    >
+                        <div>
+                            <div class="flex items-center justify-between gap-1 text-[11px] font-semibold">
+                                <span :class="dish.featured ? 'text-stone-900 font-bold' : 'text-stone-400'">
+                                    {{ dish.caterer }}
+                                </span>
+                                <span :class="dish.featured ? 'bg-amber-500/80 text-stone-950 px-2 py-0.5 rounded-full' : 'text-stone-400'">
+                                    {{ dish.calories }}
+                                </span>
+                            </div>
+
+                            <h3 class="mt-3 font-display text-base font-bold leading-snug line-clamp-2">
+                                {{ dish.name }}
+                            </h3>
+
+                            <p class="mt-1 text-xs" :class="dish.featured ? 'text-stone-800' : 'text-stone-500'">
+                                {{ dish.portion }}
+                            </p>
+                        </div>
+
+                        <!-- Card Footer: Price & Add Button -->
+                        <div class="mt-6 flex items-center justify-between border-t pt-4" :class="dish.featured ? 'border-amber-500/60' : 'border-stone-100'">
+                            <div>
+                                <span class="block text-[10px] uppercase font-bold" :class="dish.featured ? 'text-stone-800' : 'text-stone-400'">
+                                    Harga
+                                </span>
+                                <span class="font-display text-sm font-extrabold" :class="dish.featured ? 'text-stone-950' : 'text-stone-900'">
+                                    {{ money(dish.price) }}
+                                </span>
+                            </div>
+
+                            <RouterLink
+                                to="/office"
+                                class="flex h-9 w-9 items-center justify-center rounded-xl shadow-xs transition hover:scale-105 active:scale-95"
+                                :class="dish.featured ? 'bg-stone-950 text-amber-300' : 'bg-amber-500 text-stone-950'"
+                                title="Pesan menu ini"
+                            >
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </RouterLink>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Catalog List Section: Verified Caterer Partners -->
+        <section id="mitra-katering" class="scroll-mt-16 border-t border-stone-200/80 bg-white/70 py-16">
+            <div class="mx-auto max-w-6xl px-5">
+                <div class="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between border-b border-stone-200/60 pb-5">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-800">
+                                Dapur Terverifikasi
+                            </span>
+                            <span v-if="search" class="inline-flex items-center gap-1.5 rounded-full border border-amber-300 bg-amber-50 px-3 py-0.5 text-xs font-semibold text-amber-900">
+                                <span>Hasil: "{{ search }}" ({{ caterers.length }})</span>
+                                <button type="button" @click="clearSearch" class="font-bold hover:text-stone-950 ml-1">✕</button>
+                            </span>
+                        </div>
+                        <h2 class="mt-2 font-display text-2xl font-bold text-stone-900 sm:text-3xl">
+                            Mitra Vendor Katering
+                        </h2>
+                        <p class="mt-1 text-xs text-stone-500">
+                            Pilihan vendor katering siap melayani kebutuhan makan siang harian dan event kantor
+                        </p>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <button
+                            v-if="search"
+                            type="button"
+                            @click="clearSearch"
+                            class="text-xs font-bold text-stone-500 hover:text-stone-900 underline"
+                        >
+                            Tampilkan Semua
+                        </button>
+                        <RouterLink to="/office" class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 hover:text-amber-700">
+                            <span>Buka Katalog Lengkap</span>
+                            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </RouterLink>
+                    </div>
                 </div>
 
-                <p v-if="error" class="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                <!-- Error State -->
+                <p v-if="error" class="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-xs text-red-600">
                     {{ error }}
                 </p>
 
-                <div v-if="loading" class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-                    <div v-for="n in 3" :key="n" class="card h-64 animate-pulse bg-cream-100"></div>
+                <!-- Loading Skeleton -->
+                <div v-if="loading" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <div v-for="n in 3" :key="n" class="h-64 rounded-3xl border border-stone-200/80 bg-white p-6 animate-pulse">
+                        <div class="h-5 w-1/3 bg-stone-100 rounded-lg"></div>
+                        <div class="mt-4 h-6 w-2/3 bg-stone-100 rounded-lg"></div>
+                        <div class="mt-3 h-16 w-full bg-stone-100 rounded-xl"></div>
+                    </div>
                 </div>
 
-                <div v-else-if="!caterers.length" class="card p-10 text-center text-ink-500">
-                    No caterers found. Try a different search.
+                <!-- Empty State -->
+                <div v-else-if="!caterers.length" class="rounded-3xl border border-dashed border-stone-200 bg-white p-12 text-center text-sm text-stone-500">
+                    <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-2xl">
+                        🔍
+                    </div>
+                    <p class="mt-4 font-display text-lg font-bold text-stone-800">
+                        Tidak ada katering ditemukan<span v-if="search"> untuk "{{ search }}"</span>
+                    </p>
+                    <p class="mt-1 text-xs text-stone-400">Coba gunakan kata kunci lain seperti "Nusantara", "Healthy", atau "Padang".</p>
+                    <button
+                        type="button"
+                        class="btn-primary mt-5 rounded-full px-5 py-2.5 text-xs font-bold"
+                        @click="clearSearch"
+                    >
+                        Tampilkan Semua Mitra Katering
+                    </button>
                 </div>
 
-                <div v-else class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-                    <article v-for="caterer in caterers" :key="caterer.id" class="card flex flex-col overflow-hidden">
-                        <div class="relative h-28 bg-gradient-to-br from-leaf-600 via-leaf-700 to-ink-900">
-                            <span class="absolute bottom-3 left-5 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
-                                {{ caterer.cuisine_type || 'Catering' }}
-                            </span>
-                        </div>
-                        <div class="flex flex-1 flex-col p-5">
-                            <h3 class="font-display text-xl text-ink-900">{{ caterer.company_name }}</h3>
-                            <p class="mt-1 text-sm text-ink-400">{{ caterer.city }}</p>
-                            <p class="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-ink-500">
-                                {{ caterer.description || 'Fresh catering for offices and teams.' }}
-                            </p>
-                            <div class="mt-5 flex items-center justify-between gap-3">
-                                <span class="text-sm text-ink-500">
-                                    {{ caterer.menu_count }} dishes
-                                    <template v-if="caterer.min_price !== null">
-                                        · from {{ money(caterer.min_price) }}
-                                    </template>
+                <!-- Caterer Cards Grid -->
+                <div v-else class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <article
+                        v-for="caterer in caterers"
+                        :key="caterer.id"
+                        class="group flex flex-col justify-between rounded-3xl border border-stone-200/90 bg-white p-6 shadow-xs transition duration-200 hover:-translate-y-1 hover:border-amber-300 hover:shadow-lg"
+                    >
+                        <div>
+                            <!-- Header Info -->
+                            <div class="flex items-center justify-between gap-2">
+                                <span class="rounded-full bg-amber-50 border border-amber-200/80 px-3 py-0.5 text-[11px] font-bold text-amber-800 uppercase tracking-wide">
+                                    {{ caterer.cuisine_type || 'Katering' }}
                                 </span>
-                                <RouterLink
-                                    :to="{ name: 'caterer.show', params: { id: caterer.id } }"
-                                    class="btn-secondary"
-                                >
-                                    View menu
-                                </RouterLink>
+                                <span class="flex items-center gap-1 text-xs text-stone-400">
+                                    <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    {{ caterer.city || 'Indonesia' }}
+                                </span>
                             </div>
+
+                            <h3 class="mt-4 font-display text-xl font-bold text-stone-900 group-hover:text-amber-700 transition">
+                                {{ caterer.company_name }}
+                            </h3>
+
+                            <p class="mt-2 line-clamp-3 text-xs leading-relaxed text-stone-500">
+                                {{ caterer.description || 'Menyediakan aneka paket makan siang harian dan event kantor higienis dengan bahan segar pilihan.' }}
+                            </p>
+                        </div>
+
+                        <!-- Card Footer -->
+                        <div class="mt-6 border-t border-stone-100 pt-4 flex items-center justify-between">
+                            <div class="flex flex-col">
+                                <span class="text-[11px] font-medium text-stone-400">{{ caterer.menu_count }} menu tersedia</span>
+                                <span class="text-xs font-bold text-stone-800">
+                                    <template v-if="caterer.min_price !== null">
+                                        Mulai {{ money(caterer.min_price) }}
+                                    </template>
+                                    <template v-else>Harga fleksibel</template>
+                                </span>
+                            </div>
+
+                            <RouterLink
+                                :to="{ name: 'caterer.show', params: { id: caterer.id } }"
+                                class="inline-flex items-center gap-1.5 rounded-full bg-stone-900 px-4 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-stone-800 group-hover:bg-amber-500 group-hover:text-stone-950"
+                            >
+                                <span>Lihat Menu</span>
+                                <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </RouterLink>
                         </div>
                     </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3 Simple Steps for Office Managers -->
+        <section class="border-t border-stone-200/80 bg-[#FAF7F2] py-20">
+            <div class="mx-auto max-w-5xl px-5 text-center">
+                <span class="rounded-full bg-stone-200/80 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-stone-700">
+                    Cara Kerja
+                </span>
+                <h2 class="mt-3 font-display text-3xl font-bold tracking-tight text-stone-900 sm:text-4xl">
+                    Katering Kantor Tanpa Ribet
+                </h2>
+                <p class="mx-auto mt-2 max-w-lg text-sm text-stone-500">
+                    Tinggalkan proses manual dengan WhatsApp dan invoice tercecer. 3 langkah mudah untuk tim Anda.
+                </p>
+
+                <div class="mt-14 grid gap-8 sm:grid-cols-3 text-left">
+                    <div class="rounded-3xl border border-stone-200/90 bg-white p-7 shadow-xs">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-700 font-display text-lg font-black">
+                            01
+                        </div>
+                        <h3 class="mt-5 font-display text-lg font-bold text-stone-900">Pilih Dapur & Menu</h3>
+                        <p class="mt-2 text-xs leading-relaxed text-stone-500">
+                            Jelajahi puluhan vendor katering terkurasi dengan menu yang bisa disesuaikan selera tim atau pantangan diet.
+                        </p>
+                    </div>
+
+                    <div class="rounded-3xl border border-stone-200/90 bg-white p-7 shadow-xs">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700 font-display text-lg font-black">
+                            02
+                        </div>
+                        <h3 class="mt-5 font-display text-lg font-bold text-stone-900">Atur Porsi & Jadwal</h3>
+                        <p class="mt-2 text-xs leading-relaxed text-stone-500">
+                            Tentukan tanggal dan jam antar (misal setiap 11:30 WIB) serta jumlah porsi secara presisi.
+                        </p>
+                    </div>
+
+                    <div class="rounded-3xl border border-stone-200/90 bg-white p-7 shadow-xs">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-stone-900 text-amber-400 font-display text-lg font-black">
+                            03
+                        </div>
+                        <h3 class="mt-5 font-display text-lg font-bold text-stone-900">1 Invoice Konsolidasi</h3>
+                        <p class="mt-2 text-xs leading-relaxed text-stone-500">
+                            Finance tidak perlu pusing. Semua pesanan selama sebulan terkumpul dalam satu faktur resmi perusahaan.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Call to action card -->
+                <div class="mt-14 rounded-3xl bg-stone-900 p-8 sm:p-12 text-center text-white relative overflow-hidden">
+                    <div class="relative z-10 mx-auto max-w-xl">
+                        <h3 class="font-display text-2xl font-bold sm:text-3xl">
+                            Siap Tingkatkan Kualitas Makan Siang Kantor Anda?
+                        </h3>
+                        <p class="mt-3 text-xs leading-relaxed text-stone-400 sm:text-sm">
+                            Daftarkan kantor Anda sekarang atau hubungi tim kami untuk konsultasi paket berlangganan makan siang tim.
+                        </p>
+                        <div class="mt-6 flex flex-wrap justify-center gap-3">
+                            <RouterLink to="/register" class="btn-accent rounded-full px-6 py-3 text-xs uppercase tracking-wider font-bold">
+                                Daftar Akun Kantor Sekarang
+                            </RouterLink>
+                            <RouterLink to="/office" class="rounded-full border border-stone-700 bg-stone-800 px-6 py-3 text-xs font-bold text-white hover:bg-stone-700 transition">
+                                Jelajahi Semua Menu
+                            </RouterLink>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
