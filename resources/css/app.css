@@ -163,16 +163,26 @@
 }
 
 @media print {
-    .no-print {
+    .no-print,
+    header,
+    footer,
+    nav {
         display: none !important;
     }
 
     body {
         background: #fff !important;
+        color: #1c1917 !important;
+    }
+
+    main {
+        padding: 0 !important;
+        margin: 0 !important;
     }
 
     .print-card {
         border: 0 !important;
         box-shadow: none !important;
+        padding: 0 !important;
     }
 }

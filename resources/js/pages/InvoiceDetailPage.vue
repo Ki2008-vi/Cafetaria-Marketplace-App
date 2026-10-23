@@ -64,8 +64,8 @@ onMounted(load);
 </script>
 
 <template>
-    <div class="mx-auto max-w-4xl px-5 py-12">
-        <div class="no-print mb-6 flex flex-wrap items-center justify-between gap-3">
+    <div class="mx-auto max-w-4xl px-5 py-12 print:p-0 print:m-0 print:max-w-none">
+        <div class="no-print print:hidden mb-6 flex flex-wrap items-center justify-between gap-3">
             <RouterLink to="/invoices" class="btn-ghost">← Back to invoices</RouterLink>
             <div class="flex gap-2">
                 <button v-if="invoice" type="button" class="btn-secondary" @click="printInvoice">Print</button>
@@ -81,13 +81,13 @@ onMounted(load);
             </div>
         </div>
 
-        <p v-if="error" class="no-print mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <p v-if="error" class="no-print print:hidden mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
             {{ error }}
         </p>
 
         <div v-if="loading" class="card h-96 animate-pulse bg-cream-100"></div>
 
-        <article v-else-if="invoice" class="card print-card p-7 sm:p-10">
+        <article v-else-if="invoice" class="card print-card p-7 sm:p-10 print:p-0 print:border-0 print:shadow-none">
             <header class="flex flex-wrap items-start justify-between gap-6 border-b border-ink-900/10 pb-7">
                 <div>
                     <p class="text-xs font-bold uppercase tracking-[0.2em] text-ember-600">Catering Marketplace</p>

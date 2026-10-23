@@ -25,7 +25,7 @@ function isActive(path) {
 <template>
     <div class="flex min-h-screen flex-col bg-[#FAF7F2] text-stone-900 antialiased font-sans">
         <!-- Floating Modern Header (GoFoddie / Bell Inspired) -->
-        <header class="sticky top-0 z-40 border-b border-stone-200/80 bg-[#FAF7F2]/85 backdrop-blur-md">
+        <header class="no-print print:hidden sticky top-0 z-40 border-b border-stone-200/80 bg-[#FAF7F2]/85 backdrop-blur-md">
             <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5">
                 <!-- Brand Logo -->
                 <RouterLink to="/" class="group flex items-center gap-3">
@@ -179,7 +179,7 @@ function isActive(path) {
         </main>
 
         <!-- Modern Footer -->
-        <footer class="border-t border-stone-200/80 bg-white/60">
+        <footer class="no-print print:hidden border-t border-stone-200/80 bg-white/60">
             <div class="mx-auto max-w-6xl px-6 py-12">
                 <div class="grid gap-8 md:grid-cols-4">
                     <div class="md:col-span-2">
