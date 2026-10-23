@@ -42,9 +42,7 @@ function isActive(path) {
                         <div class="flex items-center gap-1.5 font-display text-lg font-bold tracking-tight text-stone-900">
                             <span>Go</span><span class="text-amber-500">Catering</span>
                         </div>
-                        <span class="block text-[10px] font-medium uppercase tracking-[0.2em] text-stone-400">
-                            B2B Office Meals
-                        </span>
+                        
                     </div>
                 </RouterLink>
 

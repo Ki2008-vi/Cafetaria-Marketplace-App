@@ -111,7 +111,6 @@ onMounted(load);
                     <!-- Left Hero Content -->
                     <div class="lg:col-span-7">
                         <div class="inline-flex items-center gap-2 rounded-full border border-amber-200/80 bg-amber-50/90 px-3.5 py-1 text-xs font-semibold text-amber-800 shadow-2xs">
-                            <span class="flex h-2 w-2 rounded-full bg-amber-500 animate-pulse"></span>
                             <span>B2B Catering Marketplace Terpercaya</span>
                         </div>
 
@@ -119,9 +118,7 @@ onMounted(load);
                             Makan Siang Tim Jadi
                             <span class="relative inline-block text-amber-600">
                                 Lebih Berselera
-                                <svg class="absolute -bottom-1.5 left-0 w-full text-amber-300/70" viewBox="0 0 100 12" fill="none" preserveAspectRatio="none">
-                                    <path d="M0 8C30 1 70 1 100 8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-                                </svg>
+                               
                             </span>
                             & Praktis.
                         </h1>
@@ -176,7 +173,7 @@ onMounted(load);
                             <div class="absolute h-[460px] w-[460px] sm:h-[500px] sm:w-[500px] lg:h-[540px] lg:w-[540px] rounded-full border border-stone-300/30"></div>
 
                             <!-- Central Appetizing Culinary Bowl -->
-                            <div class="relative z-10 h-72 w-72 sm:h-88 sm:w-88 lg:h-96 lg:w-96 overflow-hidden rounded-full border-4 border-white shadow-2xl transition hover:scale-102 duration-300">
+                            <div class="relative z-10 h-72 w-72 sm:h-88 sm:w-88 lg:h-128 lg:w-128 overflow-hidden rounded-full border-4 border-white shadow-2xl transition hover:scale-102 duration-300">
                                 <img
                                     src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80"
                                     alt="Healthy Fresh Catering"
@@ -318,14 +315,12 @@ onMounted(load);
         </section>
 
         <!-- Catalog List Section: Verified Caterer Partners -->
-        <section id="mitra-katering" class="scroll-mt-16 border-t border-stone-200/80 bg-white/70 py-16">
+        <section id="mitra-katering" class="scroll-mt-16 border-t border-stone-200/80 bg-[#FAF7F2] py-16">
             <div class="mx-auto max-w-6xl px-5">
                 <div class="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between border-b border-stone-200/60 pb-5">
                     <div>
                         <div class="flex items-center gap-2">
-                            <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-800">
-                                Dapur Terverifikasi
-                            </span>
+                            
                             <span v-if="search" class="inline-flex items-center gap-1.5 rounded-full border border-amber-300 bg-amber-50 px-3 py-0.5 text-xs font-semibold text-amber-900">
                                 <span>Hasil: "{{ search }}" ({{ caterers.length }})</span>
                                 <button type="button" @click="clearSearch" class="font-bold hover:text-stone-950 ml-1">✕</button>

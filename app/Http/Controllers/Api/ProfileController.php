@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\UserResource;
+use App\Models\Invoice;
+use App\Models\OrderItem;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController
 {
@@ -30,5 +35,41 @@ class ProfileController
         $user->update($data);
 
         return response()->json(['user' => new UserResource($user)]);
+    }
+
+    public function destroy(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        DB::transaction(function () use ($user) {
+            if ($user->isMerchant()) {
+                foreach ($user->menuItems as $item) {
+                    if ($item->photo_path) {
+                        Storage::disk('public')->delete($item->photo_path);
+                    }
+                }
+                $user->menuItems()->delete();
+
+                $orderIds = $user->ordersAsCaterer()->pluck('id');
+                Invoice::whereIn('order_id', $orderIds)->delete();
+                OrderItem::whereIn('order_id', $orderIds)->delete();
+                $user->ordersAsCaterer()->delete();
+            }
+
+            if ($user->isOffice()) {
+                $orderIds = $user->ordersAsOffice()->pluck('id');
+                Invoice::whereIn('order_id', $orderIds)->delete();
+                OrderItem::whereIn('order_id', $orderIds)->delete();
+                $user->ordersAsOffice()->delete();
+            }
+
+            $user->delete();
+        });
+
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json(['message' => 'Akun berhasil dihapus.']);
     }
 }

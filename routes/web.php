@@ -24,6 +24,7 @@ Route::prefix('api')->group(function () {
         Route::get('/dashboard', DashboardController::class);
         Route::get('/profile', [ProfileController::class, 'show']);
         Route::put('/profile', [ProfileController::class, 'update']);
+        Route::delete('/profile', [ProfileController::class, 'destroy']);
 
         Route::get('/orders', [OrderController::class, 'index']);
         Route::get('/invoices', [InvoiceController::class, 'index']);
