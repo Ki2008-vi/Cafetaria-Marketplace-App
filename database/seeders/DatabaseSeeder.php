@@ -38,5 +38,7 @@ class DatabaseSeeder extends Seeder
             'cuisine_type' => null,
             'description' => 'A growing technology team in central Jakarta.',
         ]);
+
+        $this->call(DemoMenuSeeder::class);
     }
 }

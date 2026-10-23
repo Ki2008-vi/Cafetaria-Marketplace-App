@@ -2,8 +2,156 @@
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
+@source '../js/**/*.vue';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Instrument Sans', 'Avenir Next', 'Segoe UI', ui-sans-serif, system-ui, sans-serif;
+    --font-display: Georgia, 'Times New Roman', serif;
+
+    --color-cream-50: #fcfaf5;
+    --color-cream-100: #f7f1e5;
+    --color-cream-200: #eee3cf;
+    --color-ink-400: #708077;
+    --color-ink-500: #4d5e54;
+    --color-ink-700: #2c3d32;
+    --color-ink-900: #17251c;
+    --color-leaf-50: #eef6f0;
+    --color-leaf-100: #dcebe0;
+    --color-leaf-200: #b9d7c2;
+    --color-leaf-400: #66a37e;
+    --color-leaf-600: #36795a;
+    --color-leaf-700: #2b6349;
+    --color-leaf-800: #244f3c;
+    --color-ember-50: #fff3ec;
+    --color-ember-100: #ffe2d1;
+    --color-ember-400: #f08a4b;
+    --color-ember-500: #e76f2e;
+    --color-ember-600: #cf5920;
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-cream-50 font-sans text-ink-900 antialiased;
+    }
+
+    h1,
+    h2,
+    h3 {
+        @apply font-display;
+    }
+
+    ::selection {
+        @apply bg-ember-100 text-ink-900;
+    }
+}
+
+@layer components {
+    .btn,
+    .btn-primary,
+    .btn-accent,
+    .btn-secondary,
+    .btn-ghost,
+    .btn-danger {
+        @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-leaf-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    }
+
+    .btn-primary {
+        @apply bg-leaf-700 text-white shadow-sm hover:bg-leaf-800;
+    }
+
+    .btn-accent {
+        @apply bg-ember-500 text-white shadow-sm hover:bg-ember-600;
+    }
+
+    .btn-secondary {
+        @apply border border-ink-900/10 bg-white text-ink-900 hover:border-leaf-600/40 hover:bg-leaf-50;
+    }
+
+    .btn-ghost {
+        @apply text-ink-500 hover:bg-ink-900/5 hover:text-ink-900;
+    }
+
+    .btn-danger {
+        @apply border border-red-200 bg-red-50 text-red-700 hover:bg-red-100;
+    }
+
+    .card {
+        @apply rounded-3xl border border-ink-900/10 bg-white shadow-[0_14px_45px_-30px_rgba(23,37,28,0.35)];
+    }
+
+    .input {
+        @apply w-full rounded-xl border border-ink-900/15 bg-white px-4 py-2.5 text-sm text-ink-900 outline-none transition placeholder:text-ink-400/70 focus:border-leaf-600 focus:ring-4 focus:ring-leaf-100;
+    }
+
+    .label {
+        @apply mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-ink-500;
+    }
+
+    .field-error {
+        @apply mt-1 text-xs font-medium text-red-600;
+    }
+
+    .badge,
+    .badge-green,
+    .badge-amber,
+    .badge-red,
+    .badge-gray {
+        @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold capitalize;
+    }
+
+    .badge-green {
+        @apply border-leaf-200 bg-leaf-50 text-leaf-700;
+    }
+
+    .badge-amber {
+        @apply border-amber-200 bg-amber-50 text-amber-700;
+    }
+
+    .badge-red {
+        @apply border-red-200 bg-red-50 text-red-700;
+    }
+
+    .badge-gray {
+        @apply border-ink-900/10 bg-cream-100 text-ink-500;
+    }
+
+    .table-wrap {
+        @apply overflow-x-auto;
+    }
+
+    .data-table {
+        @apply w-full min-w-[720px] text-left text-sm;
+    }
+
+    .data-table thead th {
+        @apply border-b border-ink-900/10 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.12em] text-ink-400;
+    }
+
+    .data-table tbody td {
+        @apply border-b border-ink-900/5 px-4 py-4 align-top;
+    }
+
+    .data-table tbody tr:last-child td {
+        @apply border-b-0;
+    }
+}
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+
+    body {
+        background: #fff !important;
+    }
+
+    .print-card {
+        border: 0 !important;
+        box-shadow: none !important;
+    }
 }
