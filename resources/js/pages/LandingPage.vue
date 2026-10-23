@@ -114,66 +114,106 @@ onMounted(load);
                             <span>B2B Catering Marketplace Terpercaya</span>
                         </div>
 
-                        <h1 class="mt-5 font-display text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl lg:text-6xl lg:leading-[1.12]">
+                        <h1 class="mt-4 sm:mt-5 font-display text-3xl font-extrabold tracking-tight text-stone-900 sm:text-5xl lg:text-6xl lg:leading-[1.12]">
                             Makan Siang Tim Jadi
                             <span class="relative inline-block text-amber-600">
                                 Lebih Berselera
-                               
+                                <svg class="absolute -bottom-1 left-0 w-full text-amber-300/70" viewBox="0 0 100 12" fill="none" preserveAspectRatio="none">
+                                    <path d="M0 8C30 1 70 1 100 8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                                </svg>
                             </span>
                             & Praktis.
                         </h1>
 
-                        <p class="mt-5 max-w-xl text-base leading-relaxed text-stone-600 sm:text-lg">
+                        <p class="mt-4 sm:mt-5 max-w-xl text-sm leading-relaxed text-stone-600 sm:text-lg">
                             Pesan katering harian, meeting lunch, dan event kantor dari mitra dapur terverifikasi. Tentukan porsi tim dan satukan semua tagihan ke <strong>1 invoice terpadu</strong>.
                         </p>
 
-                        <!-- Search Bar (GoFoddie Pill Style) -->
-                       
+                        <!-- Search Bar (Responsive Pill Style) -->
+                        <form class="mt-6 sm:mt-8 flex max-w-xl items-center rounded-full border border-stone-300/90 bg-white p-1.5 sm:p-2 shadow-sm transition focus-within:border-stone-900 focus-within:ring-4 focus-within:ring-stone-200/60" @submit.prevent="onSearch">
+                            <div class="flex flex-1 items-center gap-2 sm:gap-3 pl-2 sm:pl-3 min-w-0">
+                                <svg class="h-4 w-4 sm:h-5 sm:w-5 text-stone-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <input
+                                    v-model="search"
+                                    type="search"
+                                    placeholder="Cari katering, menu..."
+                                    class="w-full bg-transparent text-xs sm:text-sm text-stone-900 placeholder-stone-400 focus:outline-none min-w-0"
+                                />
+                                <button
+                                    v-if="search"
+                                    type="button"
+                                    @click="clearSearch"
+                                    class="px-1.5 text-xs font-bold text-stone-400 hover:text-stone-800 transition shrink-0"
+                                    title="Hapus filter"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                            <button
+                                type="submit"
+                                class="btn-primary rounded-full px-4 sm:px-6 py-2.5 sm:py-3 text-xs uppercase tracking-wider font-bold transition shrink-0 disabled:opacity-75"
+                                :disabled="loading"
+                            >
+                                <span v-if="loading" class="flex items-center gap-1.5">
+                                    <svg class="h-3.5 w-3.5 animate-spin" viewBox="0 0 24 24" fill="none">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                                    </svg>
+                                    <span class="hidden sm:inline">Mencari...</span>
+                                </span>
+                                <span v-else>
+                                    <span>Cari</span><span class="hidden sm:inline"> Katering</span>
+                                </span>
+                            </button>
+                        </form>
 
                         <!-- Quick Category Pills -->
-                        <div class="mt-4 flex flex-wrap items-center gap-2 text-xs text-stone-500">
-                            <span class="font-medium text-stone-400">Populer:</span>
-                            <button type="button" @click="filterCategory('Nusantara')" class="rounded-full border border-stone-200 bg-white px-3 py-1 hover:border-amber-400 hover:text-amber-800 transition">
+                        <div class="mt-4 flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs text-stone-500">
+                            <span class="font-medium text-stone-400 text-[11px] sm:text-xs">Populer:</span>
+                            <button type="button" @click="filterCategory('Nusantara')" class="rounded-full border border-stone-200 bg-white px-2.5 sm:px-3 py-1 hover:border-amber-400 hover:text-amber-800 transition text-[11px] sm:text-xs">
                                 🍛 Nusantara
                             </button>
-                            <button type="button" @click="filterCategory('Healthy')" class="rounded-full border border-stone-200 bg-white px-3 py-1 hover:border-amber-400 hover:text-amber-800 transition">
+                            <button type="button" @click="filterCategory('Healthy')" class="rounded-full border border-stone-200 bg-white px-2.5 sm:px-3 py-1 hover:border-amber-400 hover:text-amber-800 transition text-[11px] sm:text-xs">
                                 🥗 Healthy Bowls
                             </button>
-                            <button type="button" @click="filterCategory('Bento')" class="rounded-full border border-stone-200 bg-white px-3 py-1 hover:border-amber-400 hover:text-amber-800 transition">
-                                🍱 Bento Box
+                            <button type="button" @click="filterCategory('Bento')" class="rounded-full border border-stone-200 bg-white px-2.5 sm:px-3 py-1 hover:border-amber-400 hover:text-amber-800 transition text-[11px] sm:text-xs">
+                                🍱 Bento
                             </button>
-                            <button type="button" @click="filterCategory('Snack')" class="rounded-full border border-stone-200 bg-white px-3 py-1 hover:border-amber-400 hover:text-amber-800 transition">
-                                🥐 Snack Meeting
+                            <button type="button" @click="filterCategory('Snack')" class="rounded-full border border-stone-200 bg-white px-2.5 sm:px-3 py-1 hover:border-amber-400 hover:text-amber-800 transition text-[11px] sm:text-xs">
+                                🥐 Snack
                             </button>
                         </div>
 
                         <!-- Social Proof Avatars Stack -->
-                        <div class="mt-8 flex items-center gap-4 border-t border-stone-200/60 pt-6">
-                            <div class="flex -space-x-2 overflow-hidden">
-                                <img class="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80" alt="Customer" />
-                                <img class="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=80&q=80" alt="Customer" />
-                                <img class="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=80&q=80" alt="Customer" />
-                                <img class="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=80&q=80" alt="Customer" />
+                        <div class="mt-6 sm:mt-8 flex items-center gap-3 sm:gap-4 border-t border-stone-200/60 pt-5 sm:pt-6">
+                            <div class="flex -space-x-2 overflow-hidden shrink-0">
+                                <img class="inline-block h-8 w-8 sm:h-9 sm:w-9 rounded-full ring-2 ring-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80" alt="Customer" />
+                                <img class="inline-block h-8 w-8 sm:h-9 sm:w-9 rounded-full ring-2 ring-white object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=80&q=80" alt="Customer" />
+                                <img class="inline-block h-8 w-8 sm:h-9 sm:w-9 rounded-full ring-2 ring-white object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=80&q=80" alt="Customer" />
+                                <img class="inline-block h-8 w-8 sm:h-9 sm:w-9 rounded-full ring-2 ring-white object-cover" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=80&q=80" alt="Customer" />
                             </div>
-                            <div class="text-xs">
+                            <div class="text-[11px] sm:text-xs">
                                 <div class="flex items-center gap-1 font-bold text-stone-900">
                                     <span class="text-amber-500">★★★★★</span>
                                     <span>4.9 / 5.0</span>
                                 </div>
-                                <p class="text-stone-500">Dipercaya oleh <strong>350+ tim kantor</strong> setiap hari</p>
+                                <p class="text-stone-500">Dipercaya oleh <strong>350+ tim kantor</strong></p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right Hero Visual (GoFoddie Orbital Dish Feature) -->
-                    <div class="relative flex items-center justify-center lg:col-span-5 py-6">
+                    <!-- Right Hero Visual (Responsive Orbital Feature) -->
+                    <div class="relative flex items-center justify-center lg:col-span-5 py-4 sm:py-6 overflow-visible w-full max-w-[340px] sm:max-w-none mx-auto">
                         <div class="relative flex items-center justify-center">
                             <!-- Background Concentric Rings -->
-                            <div class="absolute h-88 w-88 sm:h-[420px] sm:w-[420px] lg:h-[460px] lg:w-[460px] rounded-full border border-amber-300/40 bg-amber-100/30"></div>
-                            <div class="absolute h-[460px] w-[460px] sm:h-[500px] sm:w-[500px] lg:h-[540px] lg:w-[540px] rounded-full border border-stone-300/30"></div>
+                            <div class="absolute h-64 w-64 sm:h-[380px] sm:w-[380px] lg:h-[440px] lg:w-[440px] rounded-full border border-amber-300/40 bg-amber-100/30"></div>
+                            <div class="absolute h-72 w-72 sm:h-[440px] sm:w-[440px] lg:h-[500px] lg:w-[500px] rounded-full border border-stone-300/30"></div>
 
                             <!-- Central Appetizing Culinary Bowl -->
-                            <div class="relative z-10 h-72 w-72 sm:h-88 sm:w-88 lg:h-128 lg:w-128 overflow-hidden rounded-full border-4 border-white shadow-2xl transition hover:scale-102 duration-300">
+                            <div class="relative z-10 h-56 w-56 sm:h-76 sm:w-76 lg:h-96 lg:w-96 overflow-hidden rounded-full border-4 border-white shadow-2xl transition hover:scale-102 duration-300">
                                 <img
                                     src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80"
                                     alt="Healthy Fresh Catering"
@@ -182,23 +222,23 @@ onMounted(load);
                             </div>
 
                             <!-- Floating Orbital Badge 1: Delivery Time -->
-                            <div class="absolute -top-4 -left-4 z-20 flex items-center gap-2 rounded-2xl border border-stone-200/80 bg-white/95 px-3.5 py-2 shadow-lg backdrop-blur animate-bounce" style="animation-duration: 4s;">
-                                <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-100 text-amber-700">
-                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <div class="absolute -top-3 -left-2 sm:-top-4 sm:-left-4 z-20 flex items-center gap-1.5 sm:gap-2 rounded-2xl border border-stone-200/80 bg-white/95 px-2.5 sm:px-3.5 py-1.5 sm:py-2 shadow-lg backdrop-blur">
+                                <div class="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-xl bg-amber-100 text-amber-700">
+                                    <svg class="h-3.5 w-3.5 sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <circle cx="12" cy="12" r="10"></circle>
                                         <polyline points="12 6 12 12 16 14"></polyline>
                                     </svg>
                                 </div>
                                 <div>
-                                    <span class="block text-[10px] font-bold text-stone-400 uppercase tracking-wider">Tepat Waktu</span>
-                                    <span class="block text-xs font-bold text-stone-900">Delivery 11:30 WIB</span>
+                                    <span class="block text-[9px] sm:text-[10px] font-bold text-stone-400 uppercase tracking-wider">Tepat Waktu</span>
+                                    <span class="block text-[11px] sm:text-xs font-bold text-stone-900">11:30 WIB</span>
                                 </div>
                             </div>
 
                             <!-- Floating Orbital Badge 2: 1 Invoice -->
-                            <div class="absolute -bottom-6 -right-2 z-20 flex items-center gap-2 rounded-2xl border border-stone-200/80 bg-white/95 px-3.5 py-2 shadow-lg backdrop-blur">
-                                <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
-                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <div class="absolute -bottom-4 -right-1 sm:-bottom-6 sm:-right-2 z-20 flex items-center gap-1.5 sm:gap-2 rounded-2xl border border-stone-200/80 bg-white/95 px-2.5 sm:px-3.5 py-1.5 sm:py-2 shadow-lg backdrop-blur">
+                                <div class="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+                                    <svg class="h-3.5 w-3.5 sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                         <polyline points="14 2 14 8 20 8"></polyline>
                                         <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -206,14 +246,14 @@ onMounted(load);
                                     </svg>
                                 </div>
                                 <div>
-                                    <span class="block text-[10px] font-bold text-emerald-600 uppercase tracking-wider">B2B Solved</span>
-                                    <span class="block text-xs font-bold text-stone-900">1 Invoice Bulanan</span>
+                                    <span class="block text-[9px] sm:text-[10px] font-bold text-emerald-600 uppercase tracking-wider">B2B Solved</span>
+                                    <span class="block text-[11px] sm:text-xs font-bold text-stone-900">1 Invoice Bulanan</span>
                                 </div>
                             </div>
 
-                            <!-- Floating Orbital Badge 3: Halal & Higienis -->
-                            <div class="absolute top-1/2 -right-8 z-20 -translate-y-1/2 rounded-full border border-stone-200 bg-white px-3 py-1.5 shadow-md text-xs font-semibold text-stone-700">
-                                🌿 100% Halal Certified
+                            <!-- Floating Orbital Badge 3: Halal -->
+                            <div class="hidden sm:block absolute top-1/2 -right-6 z-20 -translate-y-1/2 rounded-full border border-stone-200 bg-white px-3 py-1 shadow-md text-xs font-semibold text-stone-700">
+                                🌿 100% Halal
                             </div>
                         </div>
                     </div>

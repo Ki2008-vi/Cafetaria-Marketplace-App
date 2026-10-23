@@ -37,11 +37,14 @@
 @layer base {
     html {
         scroll-behavior: smooth;
+        overflow-x: clip;
     }
 
     body {
         @apply bg-[#FAF7F2] font-sans text-stone-900 antialiased;
         line-height: 1.5;
+        overflow-x: clip;
+        width: 100%;
     }
 
     h1,
