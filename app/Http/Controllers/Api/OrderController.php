@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\Concerns\SerializesCateringData;
+use App\Models\Invoice;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class OrderController
@@ -59,5 +62,51 @@ class OrderController
         $order->update(['status' => $data['status']]);
 
         return response()->json(['order' => $this->orderPayload($order->fresh())]);
+    }
+
+    public function destroy(Request $request, int $order): JsonResponse
+    {
+        $user = $request->user();
+
+        $orderModel = Order::query()
+            ->where(function ($query) use ($user) {
+                if ($user->isMerchant()) {
+                    $query->where('caterer_id', $user->id);
+                } else {
+                    $query->where('office_id', $user->id);
+                }
+            })
+            ->findOrFail($order);
+
+        DB::transaction(function () use ($orderModel) {
+            Invoice::where('order_id', $orderModel->id)->delete();
+            OrderItem::where('order_id', $orderModel->id)->delete();
+            $orderModel->delete();
+        });
+
+        return response()->json(['message' => 'Pesanan berhasil dihapus dari riwayat.']);
+    }
+
+    public function destroyAll(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        $query = Order::query();
+        if ($user->isMerchant()) {
+            $query->where('caterer_id', $user->id);
+        } else {
+            $query->where('office_id', $user->id);
+        }
+
+        $orders = $query->get();
+
+        DB::transaction(function () use ($orders) {
+            $orderIds = $orders->pluck('id');
+            Invoice::whereIn('order_id', $orderIds)->delete();
+            OrderItem::whereIn('order_id', $orderIds)->delete();
+            Order::whereIn('id', $orderIds)->delete();
+        });
+
+        return response()->json(['message' => 'Semua riwayat pesanan berhasil dibersihkan.']);
     }
 }

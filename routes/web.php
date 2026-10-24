@@ -27,8 +27,13 @@ Route::prefix('api')->group(function () {
         Route::delete('/profile', [ProfileController::class, 'destroy']);
 
         Route::get('/orders', [OrderController::class, 'index']);
+        Route::delete('/orders', [OrderController::class, 'destroyAll']);
+        Route::delete('/orders/{order}', [OrderController::class, 'destroy']);
+
         Route::get('/invoices', [InvoiceController::class, 'index']);
+        Route::delete('/invoices', [InvoiceController::class, 'destroyAll']);
         Route::get('/invoices/{invoice}', [InvoiceController::class, 'show']);
+        Route::delete('/invoices/{invoice}', [InvoiceController::class, 'destroy']);
     });
 
     Route::middleware(['auth', 'role:merchant'])->group(function () {

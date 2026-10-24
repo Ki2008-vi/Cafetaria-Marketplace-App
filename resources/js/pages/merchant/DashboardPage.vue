@@ -5,12 +5,15 @@ import StatusBadge from '../../components/StatusBadge.vue';
 import { api } from '../../lib/api';
 import { formatDate, money } from '../../lib/format';
 import { useAuth } from '../../stores/auth';
+import { useConfirm } from '../../stores/confirm';
 
 const { state } = useAuth();
+const { ask } = useConfirm();
 
 const data = ref(null);
 const loading = ref(true);
 const error = ref('');
+const deleting = ref(null);
 
 async function load() {
     loading.value = true;
@@ -22,6 +25,36 @@ async function load() {
         error.value = err.message;
     } finally {
         loading.value = false;
+    }
+}
+
+async function deleteOrder(order) {
+    const confirmed = await ask({
+        title: 'Hapus Riwayat Pesanan',
+        message: `Apakah Anda yakin ingin menghapus pesanan ${order.order_number} dari riwayat? Tindakan ini tidak dapat dibatalkan.`,
+        confirmText: 'Ya, Hapus',
+        cancelText: 'Batal',
+        type: 'danger',
+    });
+
+    if (!confirmed) {
+        return;
+    }
+
+    deleting.value = order.id;
+    error.value = '';
+
+    try {
+        await api.delete(`/orders/${order.id}`);
+        data.value.recent_orders = data.value.recent_orders.filter((item) => item.id !== order.id);
+        data.value.stats.orders = Math.max(0, data.value.stats.orders - 1);
+        if (order.status === 'pending') {
+            data.value.stats.pending_orders = Math.max(0, data.value.stats.pending_orders - 1);
+        }
+    } catch (err) {
+        error.value = err.message;
+    } finally {
+        deleting.value = null;
     }
 }
 
@@ -86,6 +119,7 @@ onMounted(load);
                                 <th>Delivery</th>
                                 <th>Total</th>
                                 <th>Status</th>
+                                <th class="text-right">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -95,6 +129,20 @@ onMounted(load);
                                 <td>{{ formatDate(order.delivery_date) }}</td>
                                 <td>{{ money(order.total) }}</td>
                                 <td><StatusBadge :status="order.status" /></td>
+                                <td class="text-right">
+                                    <button
+                                        type="button"
+                                        class="inline-flex items-center gap-1 rounded-lg border border-red-200 bg-red-50/70 px-2.5 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-100 hover:text-red-700 transition"
+                                        title="Hapus dari riwayat"
+                                        :disabled="deleting === order.id"
+                                        @click="deleteOrder(order)"
+                                    >
+                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                        <span>{{ deleting === order.id ? '...' : 'Hapus' }}</span>
+                                    </button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

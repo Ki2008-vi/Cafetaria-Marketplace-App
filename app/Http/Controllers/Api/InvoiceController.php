@@ -59,6 +59,36 @@ class InvoiceController
         return response()->json(['invoice' => $this->invoicePayload($invoice->fresh())]);
     }
 
+    public function destroy(Request $request, Invoice $invoice): JsonResponse
+    {
+        $this->authorizeInvoice($request, $invoice);
+
+        $invoice->delete();
+
+        return response()->json(['message' => 'Faktur berhasil dihapus dari riwayat.']);
+    }
+
+    public function destroyAll(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        $invoices = Invoice::query()
+            ->whereHas('order', function ($query) use ($user) {
+                if ($user->isMerchant()) {
+                    $query->where('caterer_id', $user->id);
+                } else {
+                    $query->where('office_id', $user->id);
+                }
+            })
+            ->get();
+
+        foreach ($invoices as $invoice) {
+            $invoice->delete();
+        }
+
+        return response()->json(['message' => 'Semua riwayat faktur berhasil dibersihkan.']);
+    }
+
     private function authorizeInvoice(Request $request, Invoice $invoice): void
     {
         $user = $request->user();

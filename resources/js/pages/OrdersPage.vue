@@ -5,13 +5,17 @@ import StatusBadge from '../components/StatusBadge.vue';
 import { api } from '../lib/api';
 import { formatDate, money, titleCase } from '../lib/format';
 import { useAuth } from '../stores/auth';
+import { useConfirm } from '../stores/confirm';
 
 const { isMerchant, isOffice } = useAuth();
+const { ask } = useConfirm();
 
 const orders = ref([]);
 const loading = ref(true);
 const error = ref('');
 const updating = ref(null);
+const deleting = ref(null);
+const deletingAll = ref(false);
 const statuses = ['pending', 'confirmed', 'preparing', 'delivered', 'cancelled'];
 
 async function load() {
@@ -45,6 +49,58 @@ async function updateStatus(order, status) {
     }
 }
 
+async function deleteOrder(order) {
+    const confirmed = await ask({
+        title: 'Hapus Riwayat Pesanan',
+        message: `Apakah Anda yakin ingin menghapus pesanan ${order.order_number} dari riwayat? Tindakan ini tidak dapat dibatalkan.`,
+        confirmText: 'Ya, Hapus',
+        cancelText: 'Batal',
+        type: 'danger',
+    });
+
+    if (!confirmed) {
+        return;
+    }
+
+    deleting.value = order.id;
+    error.value = '';
+
+    try {
+        await api.delete(`/orders/${order.id}`);
+        orders.value = orders.value.filter((entry) => entry.id !== order.id);
+    } catch (err) {
+        error.value = err.message;
+    } finally {
+        deleting.value = null;
+    }
+}
+
+async function clearAllOrders() {
+    const confirmed = await ask({
+        title: 'Hapus Semua Riwayat Pesanan',
+        message: 'Apakah Anda yakin ingin menghapus SEMURUH riwayat pesanan? Semua data riwayat pesanan akan dihapus permanen.',
+        confirmText: 'Ya, Hapus Semua',
+        cancelText: 'Batal',
+        type: 'danger',
+    });
+
+    if (!confirmed) {
+        return;
+    }
+
+    deletingAll.value = true;
+    error.value = '';
+
+    try {
+        await api.delete('/orders');
+        orders.value = [];
+    } catch (err) {
+        error.value = err.message;
+    } finally {
+        deletingAll.value = false;
+    }
+}
+
 onMounted(load);
 </script>
 
@@ -58,7 +114,18 @@ onMounted(load);
                     {{ isMerchant ? 'Orders placed with your kitchen.' : 'Lunches your office has ordered.' }}
                 </p>
             </div>
-            <RouterLink v-if="isOffice" to="/office" class="btn-secondary">Order again</RouterLink>
+            <div class="flex flex-wrap items-center gap-2">
+                <button
+                    v-if="orders.length"
+                    type="button"
+                    class="rounded-xl border border-red-200 bg-red-50 px-3.5 py-2 text-xs font-semibold text-red-600 hover:bg-red-100 hover:text-red-700 transition"
+                    :disabled="deletingAll"
+                    @click="clearAllOrders"
+                >
+                    {{ deletingAll ? 'Menghapus...' : 'Hapus Semua Riwayat' }}
+                </button>
+                <RouterLink v-if="isOffice" to="/office" class="btn-secondary">Order again</RouterLink>
+            </div>
         </div>
 
         <p v-if="error" class="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -136,6 +203,19 @@ onMounted(load);
                         >
                             View invoice
                         </RouterLink>
+
+                        <button
+                            type="button"
+                            class="inline-flex items-center gap-1.5 rounded-xl border border-red-200 bg-red-50/70 px-3 py-2 text-xs font-semibold text-red-600 hover:bg-red-100 hover:text-red-700 transition"
+                            :disabled="deleting === order.id"
+                            title="Hapus riwayat pesanan"
+                            @click="deleteOrder(order)"
+                        >
+                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            <span>{{ deleting === order.id ? 'Menghapus...' : 'Hapus' }}</span>
+                        </button>
                     </div>
                 </div>
             </article>

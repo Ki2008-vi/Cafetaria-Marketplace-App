@@ -15,6 +15,8 @@ const invoices = ref([]);
 const loading = ref(true);
 const error = ref('');
 const paying = ref(null);
+const deleting = ref(null);
+const deletingAll = ref(false);
 
 async function load() {
     loading.value = true;
@@ -59,15 +61,79 @@ async function pay(invoice) {
     }
 }
 
+async function deleteInvoice(invoice) {
+    const confirmed = await ask({
+        title: 'Hapus Riwayat Faktur',
+        message: `Apakah Anda yakin ingin menghapus faktur ${invoice.invoice_number} dari riwayat? Tindakan ini tidak dapat dibatalkan.`,
+        confirmText: 'Ya, Hapus',
+        cancelText: 'Batal',
+        type: 'danger',
+    });
+
+    if (!confirmed) {
+        return;
+    }
+
+    deleting.value = invoice.id;
+    error.value = '';
+
+    try {
+        await api.delete(`/invoices/${invoice.id}`);
+        invoices.value = invoices.value.filter((entry) => entry.id !== invoice.id);
+    } catch (err) {
+        error.value = err.message;
+    } finally {
+        deleting.value = null;
+    }
+}
+
+async function clearAllInvoices() {
+    const confirmed = await ask({
+        title: 'Hapus Semua Riwayat Faktur',
+        message: 'Apakah Anda yakin ingin menghapus SEMURUH riwayat faktur? Semua data riwayat faktur akan dihapus permanen.',
+        confirmText: 'Ya, Hapus Semua',
+        cancelText: 'Batal',
+        type: 'danger',
+    });
+
+    if (!confirmed) {
+        return;
+    }
+
+    deletingAll.value = true;
+    error.value = '';
+
+    try {
+        await api.delete('/invoices');
+        invoices.value = [];
+    } catch (err) {
+        error.value = err.message;
+    } finally {
+        deletingAll.value = false;
+    }
+}
+
 onMounted(load);
 </script>
 
 <template>
     <div class="mx-auto max-w-6xl px-5 py-12">
-        <div class="mb-7">
-            <p class="text-xs font-bold uppercase tracking-[0.18em] text-ember-600">Billing</p>
-            <h1 class="mt-2 font-display text-3xl text-ink-900">Invoices</h1>
-            <p class="mt-2 text-sm text-ink-500">Every order gets one invoice, visible to both parties.</p>
+        <div class="mb-7 flex flex-wrap items-end justify-between gap-4">
+            <div>
+                <p class="text-xs font-bold uppercase tracking-[0.18em] text-ember-600">Billing</p>
+                <h1 class="mt-2 font-display text-3xl text-ink-900">Invoices</h1>
+                <p class="mt-2 text-sm text-ink-500">Every order gets one invoice, visible to both parties.</p>
+            </div>
+            <div v-if="invoices.length" class="flex items-center gap-2">
+                <button
+                    type="button"
+                    class="rounded-xl border border-red-200 bg-red-50 px-3.5 py-2 text-xs font-semibold text-red-600 hover:bg-red-100 hover:text-red-700 transition"
+                    :disabled="deletingAll"
+                    @click="clearAllInvoices"
+                >
+                    {{ deletingAll ? 'Menghapus...' : 'Hapus Semua Riwayat' }}
+                </button>
+            </div>
         </div>
 
         <p
@@ -131,6 +197,18 @@ onMounted(load);
                                     >
                                         View
                                     </RouterLink>
+                                    <button
+                                        type="button"
+                                        class="inline-flex items-center gap-1 rounded-lg border border-red-200 bg-red-50/70 px-2.5 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-100 hover:text-red-700 transition"
+                                        title="Hapus riwayat faktur"
+                                        :disabled="deleting === invoice.id"
+                                        @click="deleteInvoice(invoice)"
+                                    >
+                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                        <span>{{ deleting === invoice.id ? '...' : 'Hapus' }}</span>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
