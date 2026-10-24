@@ -118,9 +118,7 @@ onMounted(load);
                             Makan Siang Tim Jadi
                             <span class="relative inline-block text-amber-600">
                                 Lebih Berselera
-                                <svg class="absolute -bottom-1 left-0 w-full text-amber-300/70" viewBox="0 0 100 12" fill="none" preserveAspectRatio="none">
-                                    <path d="M0 8C30 1 70 1 100 8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-                                </svg>
+                        
                             </span>
                             & Praktis.
                         </h1>
@@ -128,48 +126,7 @@ onMounted(load);
                         <p class="mt-4 sm:mt-5 max-w-xl text-sm leading-relaxed text-stone-600 sm:text-lg">
                             Pesan katering harian, meeting lunch, dan event kantor dari mitra dapur terverifikasi. Tentukan porsi tim dan satukan semua tagihan ke <strong>1 invoice terpadu</strong>.
                         </p>
-
-                        <!-- Search Bar (Responsive Pill Style) -->
-                        <form class="mt-6 sm:mt-8 flex max-w-xl items-center rounded-full border border-stone-300/90 bg-white p-1.5 sm:p-2 shadow-sm transition focus-within:border-stone-900 focus-within:ring-4 focus-within:ring-stone-200/60" @submit.prevent="onSearch">
-                            <div class="flex flex-1 items-center gap-2 sm:gap-3 pl-2 sm:pl-3 min-w-0">
-                                <svg class="h-4 w-4 sm:h-5 sm:w-5 text-stone-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="11" cy="11" r="8"></circle>
-                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                </svg>
-                                <input
-                                    v-model="search"
-                                    type="search"
-                                    placeholder="Cari katering, menu..."
-                                    class="w-full bg-transparent text-xs sm:text-sm text-stone-900 placeholder-stone-400 focus:outline-none min-w-0"
-                                />
-                                <button
-                                    v-if="search"
-                                    type="button"
-                                    @click="clearSearch"
-                                    class="px-1.5 text-xs font-bold text-stone-400 hover:text-stone-800 transition shrink-0"
-                                    title="Hapus filter"
-                                >
-                                    ✕
-                                </button>
-                            </div>
-                            <button
-                                type="submit"
-                                class="btn-primary rounded-full px-4 sm:px-6 py-2.5 sm:py-3 text-xs uppercase tracking-wider font-bold transition shrink-0 disabled:opacity-75"
-                                :disabled="loading"
-                            >
-                                <span v-if="loading" class="flex items-center gap-1.5">
-                                    <svg class="h-3.5 w-3.5 animate-spin" viewBox="0 0 24 24" fill="none">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                                    </svg>
-                                    <span class="hidden sm:inline">Mencari...</span>
-                                </span>
-                                <span v-else>
-                                    <span>Cari</span><span class="hidden sm:inline"> Katering</span>
-                                </span>
-                            </button>
-                        </form>
-
+                       
                         <!-- Quick Category Pills -->
                         <div class="mt-4 flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs text-stone-500">
                             <span class="font-medium text-stone-400 text-[11px] sm:text-xs">Populer:</span>
@@ -213,7 +170,7 @@ onMounted(load);
                             <div class="absolute h-72 w-72 sm:h-[440px] sm:w-[440px] lg:h-[500px] lg:w-[500px] rounded-full border border-stone-300/30"></div>
 
                             <!-- Central Appetizing Culinary Bowl -->
-                            <div class="relative z-10 h-56 w-56 sm:h-76 sm:w-76 lg:h-96 lg:w-96 overflow-hidden rounded-full border-4 border-white shadow-2xl transition hover:scale-102 duration-300">
+                            <div class="relative z-10 h-56 w-56 sm:h-76 sm:w-76 lg:h-120 lg:w-120 overflow-hidden rounded-full border-4 border-white shadow-2xl transition hover:scale-102 duration-300">
                                 <img
                                     src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80"
                                     alt="Healthy Fresh Catering"
