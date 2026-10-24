@@ -1,91 +1,91 @@
 # 🍱 Cafetaria Marketplace App
 
-A full-stack **B2B Catering Marketplace** built with **Laravel 13** and **Vue 3**, designed to connect office teams with local catering merchants. Office users can browse caterers, place orders, and manage invoices — while merchants can manage their menus and track incoming orders from a dedicated dashboard.
+Aplikasi **B2B Catering Marketplace** *full-stack* yang dibangun menggunakan **Laravel 13** dan **Vue 3**, dirancang untuk menghubungkan tim perkantoran dengan mitra katering lokal. Pengguna kantor dapat mencari katering, melakukan pemesanan, dan mengelola faktur (invoice) — sementara mitra katering dapat mengelola menu mereka serta memantau pesanan masuk melalui dasbor khusus.
 
 ---
 
-## ✨ Features
+## ✨ Fitur Utama
 
-### 👔 For Office Users
-- Browse and search catering merchants by cuisine type, city, and availability
-- View detailed caterer profiles with full menu listings
-- Add items to a shopping cart and place orders with delivery details
-- Track order history and statuses
-- View and pay invoices directly from the app
+### 👔 Untuk Pengguna Kantor (Office)
+- Menjelajahi dan mencari mitra katering berdasarkan jenis kuliner, kota, dan ketersediaan
+- Melihat profil lengkap katering beserta daftar menu yang tersedia
+- Menambahkan item ke keranjang belanja dan membuat pesanan beserta detail pengiriman
+- Memantau riwayat dan status pemesanan
+- Melihat dan membayar tagihan (invoice) langsung dari aplikasi
 
-### 🧑‍🍳 For Merchants
-- Dedicated merchant dashboard with order statistics
-- Full menu management: create, update, and delete menu items with photo uploads
-- Update order statuses (pending → confirmed → preparing → delivered)
-- Automatic invoice generation when an order is placed
+### 🧑🍳 Untuk Mitra Katering (Merchant)
+- Dasbor khusus merchant dengan statistik pemesanan
+- Manajemen menu lengkap: membuat, memperbarui, dan menghapus item menu disertai unggah foto
+- Memperbarui status pesanan (*pending* → *confirmed* → *preparing* → *delivered*)
+- Pembuatan invoice otomatis setiap kali pesanan baru dibuat
 
-### 🔐 Authentication & Authorization
-- Session-based authentication with role-based access control
-- Two roles: `merchant` and `office`
-- Route guards on both frontend (Vue Router) and backend (Laravel middleware)
+### 🔐 Autentikasi & Otorisasi
+- Autentikasi berbasis *session* dengan kontrol akses berbasis peran (*role-based access control*)
+- Dua peran (*roles*): `merchant` dan `office`
+- Pembatasan rute (*route guards*) di sisi *frontend* (Vue Router) maupun *backend* (Laravel middleware)
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Teknologi yang Digunakan
 
-| Layer       | Technology                                  |
+| Komponen    | Teknologi                                   |
 |-------------|---------------------------------------------|
 | Backend     | PHP 8.3, Laravel 13                         |
 | Frontend    | Vue 3 (SPA), Vue Router 5                   |
 | Styling     | Tailwind CSS v4                             |
 | Build Tool  | Vite 8                                      |
-| Database    | SQLite (development) / MySQL (production)   |
+| Database    | SQLite (pengembangan) / MySQL (produksi)    |
 | Auth        | Laravel Session Auth                        |
 
 ---
 
-## 📁 Project Structure
+## 📁 Struktur Proyek
 
 ```
 catering-marketplace/
 ├── app/
 │   ├── Http/
-│   │   ├── Controllers/Api/    # API controllers (Auth, Caterer, Order, Invoice, Menu, Profile, Dashboard)
-│   │   └── Middleware/         # Role-based middleware
-│   ├── Models/                 # Eloquent models (User, MenuItem, Order, OrderItem, Invoice)
+│   │   ├── Controllers/Api/    # Controller API (Auth, Caterer, Order, Invoice, Menu, Profile, Dashboard)
+│   │   └── Middleware/         # Middleware berbasis peran
+│   ├── Models/                 # Model Eloquent (User, MenuItem, Order, OrderItem, Invoice)
 │   └── Services/
-│       └── OrderService.php    # Business logic for order creation & invoice generation
+│       └── OrderService.php    # Logika bisnis untuk pembuatan pesanan & invoice
 │
 ├── database/
-│   ├── migrations/             # All database schema migrations
+│   ├── migrations/             # Semua migrasi skema database
 │   └── seeders/
-│       ├── DatabaseSeeder.php  # Main seeder (demo accounts)
-│       └── DemoMenuSeeder.php  # Seeds sample menu items for demo merchants
+│       ├── DatabaseSeeder.php  # Seeder utama (akun demo)
+│       └── DemoMenuSeeder.php  # Seeder item menu sampel untuk demo merchant
 │
 ├── resources/
 │   └── js/
-│       ├── App.vue             # Root Vue component with navigation
-│       ├── router.js           # Vue Router with role-based route guards
-│       ├── stores/             # Reactive state (auth.js, cart.js, confirm.js)
-│       ├── components/         # Shared components (ConfirmModal, StatusBadge)
+│       ├── App.vue             # Komponen utama Vue beserta navigasi
+│       ├── router.js           # Vue Router dengan route guards berbasis peran
+│       ├── stores/             # Manajemen state reaktif (auth.js, cart.js, confirm.js)
+│       ├── components/         # Komponen bersama (ConfirmModal, StatusBadge)
 │       └── pages/
-│           ├── LandingPage.vue         # Public landing page
-│           ├── LoginPage.vue           # Login form
-│           ├── RegisterPage.vue        # Registration form (role selection)
-│           ├── OrdersPage.vue          # Order history
-│           ├── InvoicesPage.vue        # Invoice list
-│           ├── InvoiceDetailPage.vue   # Invoice detail & payment
-│           ├── ProfilePage.vue         # User profile settings
+│           ├── LandingPage.vue         # Halaman utama publik
+│           ├── LoginPage.vue           # Form login
+│           ├── RegisterPage.vue        # Form registrasi (pemilihan peran)
+│           ├── OrdersPage.vue          # Riwayat pemesanan
+│           ├── InvoicesPage.vue        # Daftar tagihan / invoice
+│           ├── InvoiceDetailPage.vue   # Detail invoice & pembayaran
+│           ├── ProfilePage.vue         # Pengaturan profil pengguna
 │           ├── merchant/
-│           │   ├── DashboardPage.vue   # Merchant stats & recent orders
-│           │   └── MenuPage.vue        # Merchant menu management
+│           │   ├── DashboardPage.vue   # Statistik merchant & pesanan terbaru
+│           │   └── MenuPage.vue        # Manajemen menu merchant
 │           └── office/
-│               ├── BrowsePage.vue      # Browse & filter caterers
-│               ├── CatererPage.vue     # Caterer detail with full menu
-│               └── CartPage.vue        # Cart & checkout
+│               ├── BrowsePage.vue      # Cari & filter katering
+│               ├── CatererPage.vue     # Detail katering beserta menu lengkap
+│               └── CartPage.vue        # Keranjang belanja & checkout
 │
 └── routes/
-    └── web.php                 # All API routes + SPA fallback
+    └── web.php                 # Seluruh rute API + fallback SPA
 ```
 
 ---
 
-## 🗄️ Database Schema
+## 🗄️ Skema Basis Data
 
 ```
 users
@@ -126,117 +126,117 @@ invoices
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Panduan Memulai
 
-### Prerequisites
+### Prasyarat
 - PHP 8.3+
 - Composer
 - Node.js 20+ & npm
 
-### Installation
+### Instalasi
 
 ```bash
-# 1. Clone the repository
+# 1. Clone repository
 git clone https://github.com/Ki2008-vi/Cafetaria-Marketplace-App.git
 cd catering-marketplace
 
-# 2. Install all dependencies and set up the application
+# 2. Instal semua dependensi dan siapkan aplikasi
 composer run setup
 ```
 
-The `setup` script will automatically:
-- Install PHP dependencies (`composer install`)
-- Copy `.env.example` to `.env` and generate an application key
-- Run all database migrations
-- Install Node.js dependencies and build frontend assets
+Perintah `setup` di atas akan otomatis melakukan:
+- Menginstal dependensi PHP (`composer install`)
+- Menyalin file `.env.example` ke `.env` dan membuat application key
+- Menjalankan seluruh migrasi database
+- Menginstal dependensi Node.js dan mengompilasi aset frontend
 
-### Running Locally
+### Menjalankan secara Lokal
 
 ```bash
-# Start all services concurrently (Laravel + Vite dev server)
+# Menjalankan semua layanan secara bersamaan (server backend Laravel + dev server Vite)
 composer run dev
 ```
 
-Or start them individually:
+Atau jalankan secara terpisah di terminal yang berbeda:
 
 ```bash
-php artisan serve   # Laravel backend at http://localhost:8000
-npm run dev         # Vite frontend dev server
+php artisan serve   # Backend Laravel di http://localhost:8000
+npm run dev         # Frontend dev server Vite
 ```
 
 ---
 
-## 🌱 Demo Data
+## 🌱 Data Demo
 
-Seed the database with demo accounts and sample menu items:
+Isi database dengan akun demo dan contoh menu:
 
 ```bash
 php artisan db:seed
 php artisan db:seed --class=DemoMenuSeeder
 ```
 
-### Demo Accounts
+### Akun Demo
 
-| Role     | Email                       | Password   | Company              |
-|----------|-----------------------------|------------|----------------------|
-| Merchant | `merchant@catering.test`    | `password` | *(primary merchant)* |
-| Merchant | `healthy@catering.test`     | `password` | Green Bowl Kitchen   |
-| Office   | `office@catering.test`      | `password` | *(office team)*      |
-
----
-
-## 🔌 API Endpoints
-
-All routes are prefixed with `/api`.
-
-### Public
-| Method | Endpoint              | Description                   |
-|--------|-----------------------|-------------------------------|
-| POST   | `/register`           | Register a new user           |
-| POST   | `/login`              | Login and start session       |
-| GET    | `/caterers`           | List all caterers             |
-| GET    | `/caterers/{id}`      | Get caterer detail + menu     |
-| GET    | `/filters`            | Get available filter options  |
-
-### Authenticated (all roles)
-| Method | Endpoint                | Description              |
-|--------|-------------------------|--------------------------|
-| GET    | `/me`                   | Get current user info    |
-| POST   | `/logout`               | Logout                   |
-| GET    | `/dashboard`            | Dashboard statistics     |
-| GET    | `/profile`              | View profile             |
-| PUT    | `/profile`              | Update profile           |
-| GET    | `/orders`               | List orders              |
-| GET    | `/invoices`             | List invoices            |
-| GET    | `/invoices/{id}`        | Get invoice detail       |
-
-### Office Only
-| Method | Endpoint                   | Description        |
-|--------|----------------------------|--------------------|
-| POST   | `/orders`                  | Place a new order  |
-| POST   | `/invoices/{id}/pay`       | Pay an invoice     |
-
-### Merchant Only
-| Method | Endpoint                            | Description             |
-|--------|-------------------------------------|-------------------------|
-| GET    | `/merchant/menu-items`              | List own menu items     |
-| POST   | `/merchant/menu-items`              | Create a menu item      |
-| PUT    | `/merchant/menu-items/{id}`         | Update a menu item      |
-| DELETE | `/merchant/menu-items/{id}`         | Delete a menu item      |
-| PATCH  | `/merchant/orders/{id}/status`      | Update order status     |
+| Peran (Role) | Email                       | Kata Sandi | Perusahaan           |
+|--------------|-----------------------------|------------|----------------------|
+| Merchant     | `merchant@catering.test`    | `password` | *(primary merchant)* |
+| Merchant     | `healthy@catering.test`     | `password` | Green Bowl Kitchen   |
+| Office       | `office@catering.test`      | `password` | *(office team)*      |
 
 ---
 
-## 🧪 Running Tests
+## 🔌 Endpoint API
+
+Semua rute diawali dengan prefix `/api`.
+
+### Publik
+| Method | Endpoint              | Deskripsi                              |
+|--------|-----------------------|----------------------------------------|
+| POST   | `/register`           | Pendaftaran pengguna baru              |
+| POST   | `/login`              | Masuk (login) dan memulai sesi         |
+| GET    | `/caterers`           | Menampilkan semua katering             |
+| GET    | `/caterers/{id}`      | Menampilkan detail katering beserta menu|
+| GET    | `/filters`            | Mengambil opsi filter yang tersedia    |
+
+### Terautentikasi (Semua Peran)
+| Method | Endpoint                | Deskripsi                         |
+|--------|-------------------------|-----------------------------------|
+| GET    | `/me`                   | Mengambil data pengguna saat ini  |
+| POST   | `/logout`               | Keluar (logout)                   |
+| GET    | `/dashboard`            | Statistik dasbor                  |
+| GET    | `/profile`              | Melihat profil                    |
+| PUT    | `/profile`              | Memperbarui profil                |
+| GET    | `/orders`               | Menampilkan daftar pesanan        |
+| GET    | `/invoices`             | Menampilkan daftar tagihan        |
+| GET    | `/invoices/{id}`        | Melihat detail tagihan            |
+
+### Khusus Pengguna Kantor (Office Only)
+| Method | Endpoint                   | Deskripsi                 |
+|--------|----------------------------|---------------------------|
+| POST   | `/orders`                  | Membuat pesanan baru      |
+| POST   | `/invoices/{id}/pay`       | Membayar tagihan          |
+
+### Khusus Mitra Katering (Merchant Only)
+| Method | Endpoint                            | Deskripsi                         |
+|--------|-------------------------------------|-----------------------------------|
+| GET    | `/merchant/menu-items`              | Menampilkan menu milik sendiri    |
+| POST   | `/merchant/menu-items`              | Menambahkan item menu baru        |
+| PUT    | `/merchant/menu-items/{id}`         | Memperbarui item menu             |
+| DELETE | `/merchant/menu-items/{id}`         | Menghapus item menu               |
+| PATCH  | `/merchant/orders/{id}/status`      | Memperbarui status pesanan        |
+
+---
+
+## 🧪 Menjalankan Pengujian (Testing)
 
 ```bash
 composer run test
-# or
+# atau
 php artisan test
 ```
 
 ---
 
-## 📄 License
+## 📄 Lisensi
 
-This project is open-sourced under the [MIT license](https://opensource.org/licenses/MIT).
+Proyek ini merupakan perangkat lunak sumber terbuka di bawah lisensi [MIT license](https://opensource.org/licenses/MIT).
